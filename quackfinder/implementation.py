@@ -1,6 +1,5 @@
 import networkx as nx
 
-
 def test():
     G = nx.Graph()
     # G.add_nodes_from([1, 2, 3, 4, 5])
@@ -16,10 +15,6 @@ def test():
 
     print(dijkstra(G))
 
-
 def dijkstra(G):
     print("Hello")
     print(G.edges)
-
-
-test()
