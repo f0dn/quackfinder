@@ -34,3 +34,16 @@ def add_route(m: folium.Map , coords: list[list[float]]): #DOES NOT SMOOTH OUT A
         weight = 5,
     ).add_to(m)
 
+def User_Markers(m:folium.Map):
+    folium.ClickForMarker().add_to(m)
+
+def add_layer(m:folium.Map, name: str):
+    layer = folium.FeatureGroup(
+        name = name , 
+        overlay = True
+        )
+    layer.add_to(m)
+    return layer
+
+
+
