@@ -1,4 +1,7 @@
 import folium
+from branca.element import MacroElement
+from jinja2 import Template
+#All these functions are based on folium; all of them create/interact a static html map
 def create_map(lat: float, long: float , zoom: int): #Uses OpenStreetMap
     m = folium.Map(
         location = (lat, long),
@@ -45,5 +48,32 @@ def add_layer(m:folium.Map, name: str):
     layer.add_to(m)
     return layer
 
+def count_markers(m:folium.Map,):
+    count = 0
 
+    for child in m._children.values():
+        if isinstance(child, folium.Marker):
+            count = count + 1
 
+class ClickReporter(MacroElement):
+    ##THIS IS MOSTLY JavaScript AND I DON'T KNOW HOW IT WORKS
+    ##SINCE I DON'T KNOW JAVASCRIPT
+    ##BE WARNED
+    _template = Template("""
+        {% macro script(this, kwargs) %} 
+        {{ this._parent.get_name() }}.on("click", function (e) {
+            const point = e.latlng.wrap();
+            L.marker(point).addTo({{ this._parent.get_name() }});
+            fetch({{ this.url|tojson }}, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({lat: point.lat, lng: point.lng}),
+            }).catch(console.error);
+        });
+        {% endmacro %}
+    """)
+
+    def __init__(self, url="/points"):
+        super().__init__()
+        self._name = "ClickReporter"
+        self.url = url
