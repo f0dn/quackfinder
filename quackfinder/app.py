@@ -1,2 +1,7 @@
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
 def run():
-    print("Hello from quackfinder!")
+    return "<p> Hello from quackfinder! <p>"
