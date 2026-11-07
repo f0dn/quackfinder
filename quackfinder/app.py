@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, jsonify
 import folium
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 clicked_points = []
@@ -34,9 +34,6 @@ def home():
             popup=f"Clicked Point: {lat}, {lng}",
             icon=folium.Icon(color="red")
         ).add_to(map)
-
-    # Render map HTML
-    map_html = map._repr_html_()
 
     return map.get_root().render()
 
