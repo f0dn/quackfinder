@@ -1,11 +1,8 @@
 import networkx as nx
 
+
 def test():
     G = nx.DiGraph()
-    # G.add_nodes_from([1, 2, 3, 4, 5])
-    # list = [(1, 2, 3), (2, 3, 7), (3, 5, 2), (1, 4, 5), (4, 5, 1)]
-    # for i in list:
-    #     G.add_weighted_edges_from(i)
 
     G.add_edge('A', 'B', weight=3)
     G.add_edge('A', 'D', weight=5)
@@ -16,6 +13,7 @@ def test():
     G.add_edge('F', 'E', weight=3)
 
     print(dijkstra(G, "A", "E"))
+
 
 def closest_neighbor(G, starting_node):
     closest_node = ""
@@ -28,6 +26,7 @@ def closest_neighbor(G, starting_node):
         # print(node)
     return (closest_node, G.get_edge_data(starting_node, closest_node)['weight'])
 
+
 def dijkstra(G, starting_node, ending_node):
     total_distance = 0
     final_path = [starting_node]
@@ -35,21 +34,15 @@ def dijkstra(G, starting_node, ending_node):
 
     # final_path.append("TESTING")
     # print(final_path[-1])
-    
+
     while final_path[-1] != ending_node:
         closest_neighbor(G, current_node)
         data = closest_neighbor(G, current_node)
         final_path.append(data[0])
         total_distance += data[1]
         current_node = data[0]
-        print(data)
-        # print("HI")
-    print("Final path: ")
-    print(final_path, total_distance)
 
-    # print("Hello")
-    # print(G.get_edge_data("A", "B"))
-    
-    # print(closest_neighbor(G, "A"))
+    return final_path, total_distance
 
-    # print(G.edges)
+
+test()
