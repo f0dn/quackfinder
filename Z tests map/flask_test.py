@@ -15,19 +15,26 @@ def main():
         ]
         add_route(map, coordinates)
 
-        for lat,long in clicked_points:
-            add_marker(map, lat, long)
-
-        ClickReporter().add_to(map)
+        ClickReporter(points=clicked_points).add_to(map)
         map_html = map.get_root().render()
         return render_template("index.html", map_html=map_html)
+        
+
 
     @app.post("/points")
     def add_point():
         data = request.get_json()
         point = [float(data["lat"]), float(data["lng"])]
-        clicked_points.append(point)
+        if len(clicked_points) < 2:
+            clicked_points.append(point)   # start point, then end point
+        else:
+            clicked_points[1] = point      # replace the end point
+        
+        print_points(clicked_points)
+        
         return jsonify(point), 201
+        
+    
 
     @app.get("/points")
     def get_points():
