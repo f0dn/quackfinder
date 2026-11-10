@@ -33,8 +33,18 @@ def main():
         print_points(clicked_points)
         
         return jsonify(point), 201
-        
-    
+
+    # Called when a marker is dragged: PUT /points/0 moves the start, PUT /points/1 moves the end
+    @app.put("/points/<int:index>")
+    def move_point(index):
+        if index >= len(clicked_points):
+            return jsonify(error = "no such point"), 404
+        data = request.get_json()
+        clicked_points[index] = [float(data["lat"]), float(data["lng"])]
+
+        print_points(clicked_points)
+
+        return jsonify(clicked_points[index]), 200
 
     @app.get("/points")
     def get_points():
