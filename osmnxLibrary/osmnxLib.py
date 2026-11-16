@@ -21,6 +21,8 @@ G = ox.graph_from_place(place, network_type="drive")
 stats = ox.stats.basic_stats(G)
 print(stats)
 print("Total Edges", G.number_of_edges())
+lat, lon = ox.geocode(place)
+print(f"Latitude: {lat}, Longitude: {lon}")
 
 
 nodes, edges = ox.graph_to_gdfs(G)
@@ -32,5 +34,5 @@ print(edges[["name", "highway", "length", "geometry"]].head())
 
 
 print(specific_street[["name", "geometry"]])
-print(get_elevation(40.636, -73.740))
+print(get_elevation(lat, lon))
 fig, ax = ox.plot_graph_route(G, route=[u,v])
