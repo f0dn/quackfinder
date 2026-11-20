@@ -1,5 +1,3 @@
-import osmnx as ox
-
 #Returns nearest node in graph to coordinates
 def get_nearest_node(graph, latitude, longitude):
     pass
