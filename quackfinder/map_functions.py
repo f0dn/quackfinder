@@ -62,14 +62,18 @@ class ClickReporter(JSCSSMixin, MacroElement):
     ##and the template below just calls that function with our data.
     default_js = [("JS_functions", "/static/JS_functions.js")]
 
+    ##route is the path to draw when the page loads (from Python);
+    ##after that, the JavaScript asks route_url for a new route whenever a point changes.
     _template = Template("""
         {% macro script(this, kwargs) %}
-        setupClickReporter({{ this._parent.get_name() }}, {{ this.points|tojson }}, {{ this.url|tojson }});
+        setupClickReporter({{ this._parent.get_name() }}, {{ this.points|tojson }}, {{ this.url|tojson }}, {{ this.route|tojson }}, {{ this.route_url|tojson }});
         {% endmacro %}
     """)
 
-    def __init__(self, url="/points", points=None):
+    def __init__(self, url="/points", points=None, route=None, route_url="/calculate-route"):
         super().__init__()
         self._name = "ClickReporter"
         self.url = url
         self.points = points or []  # markers to draw when the page loads
+        self.route = route or []  # route to draw when the page loads
+        self.route_url = route_url

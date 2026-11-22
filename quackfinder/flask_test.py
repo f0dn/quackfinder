@@ -1,5 +1,14 @@
 from flask import *
-from map_functions import *
+from quackfinder.map_functions import *
+
+def test_distras(coords: list[list[float]]):
+    start = coords[0]
+    destination = coords[1]
+
+    middle = [start[0], destination[1]]
+
+    return [start, middle, destination]
+
 
 def main():
     app = Flask(__name__)
@@ -8,14 +17,11 @@ def main():
     @app.route("/")
     def home():
         map = create_map(40.9153, -73.1231, 20)
-        coordinates = [
-            [40.9153, -73.1231],
-            [40.917238, -73.124638],
-            [40.9135, -73.1260]
-        ]
-        add_route(map, coordinates)
 
-        ClickReporter(points=clicked_points).add_to(map)
+        # draw the route right away if both points are already picked;
+        # after this, the JavaScript keeps it updated using /calculate-route
+        route = test_distras(clicked_points) if len(clicked_points) == 2 else []
+        ClickReporter(points=clicked_points, route=route).add_to(map)
         map_html = map.get_root().render()
         return render_template("index.html", map_html=map_html)
         
@@ -49,8 +55,24 @@ def main():
     @app.get("/points")
     def get_points():
         return jsonify(count = len(clicked_points) , points = clicked_points)
-    
+
+    @app.get("/calculate-route")
+    def calculate_route():
+
+        if len(clicked_points) < 2:
+            return jsonify(
+                error="Two points are required"
+            ), 400
+
+        route = test_distras(clicked_points)
+
+        return jsonify({
+            "route": route
+        })
+    return app
     app.run(debug = True)
 
-main()
+
+if __name__ == "__main__":
+    main()
 
