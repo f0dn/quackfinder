@@ -1,5 +1,5 @@
 import networkx as nx
-from quackfinder.implementation import dijkstra
+from quackfinder.implementation import dijkstra, greedy_dijkstra
 import pytest
 
 
@@ -62,4 +62,5 @@ def test_dijkstra(edges, expected, start_node, end_node):
     for edge in edges:
         G.add_edge(edge[0], edge[1], weight=edge[2])
 
-    assert dijkstra(G, start_node, end_node)[1] == expected
+    # print("hiii")
+    assert greedy_dijkstra(G, start_node, end_node)[1] == expected

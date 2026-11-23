@@ -1,5 +1,5 @@
-import quackfinder.implementation as d
+import quackfinder.implementation as dijkstra
 
 def run():
-    d.test()
+    dijkstra.test()
     print("Hello from quackfinder!")
