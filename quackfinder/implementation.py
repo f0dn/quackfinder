@@ -18,30 +18,28 @@ def test():
     print(dijkstra(G, "A", "E"))
 
 def iterative_step(G):
+    node_data = G.nodes(data=True)
 
     # STEP 1: choose the node with the smallest node_weight
     current_node = "" # node with the smallest node_weight
-    for (node,node_data) in G.nodes(data=True):
-        # don't even consider them if they have already been visited
-        if node_data["visited"] == False:
+    for node in G.nodes():
+        if node_data[node]["visited"] == False: # don't even consider them if they have already been visited
             if current_node == "": # only happens in the first loop cycle
                 current_node = node
             else:
-                if node_data["node_weight"] <= G.nodes[current_node]["node_weight"]:
+                if node_data[node]["node_weight"] <= node_data[current_node]["node_weight"]:
                     current_node = node
     # print(current_node)
 
     # STEP 2: visit its neighbors
-    data = G.nodes(data=True)
-    
     for neighbor in G.neighbors(current_node):
-        if not data[neighbor]["visited"]:
+        if not node_data[neighbor]["visited"]:
             # print(f"NBR: {neighbor}")
             # print("---")
-            new_cumulative_sum = data[current_node]["node_weight"] + G.get_edge_data(current_node, neighbor)["edge_weight"]
-            if (new_cumulative_sum) <= data[neighbor]["node_weight"]:
-                data[neighbor]["node_weight"] = new_cumulative_sum
-    G.nodes[current_node]["visited"] = True
+            new_cumulative_sum = node_data[current_node]["node_weight"] + G.get_edge_data(current_node, neighbor)["edge_weight"]
+            if (new_cumulative_sum) <= node_data[neighbor]["node_weight"]:
+                node_data[neighbor]["node_weight"] = new_cumulative_sum
+    node_data[current_node]["visited"] = True
 
 def dijkstra(G, starting_node, ending_node):
     G.nodes[starting_node]["node_weight"] = 0
@@ -57,7 +55,6 @@ def dijkstra(G, starting_node, ending_node):
         number_of_visited_nodes += 1
 
     return G.nodes[ending_node]["node_weight"]
-
 
 #################################
 
